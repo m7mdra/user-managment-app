@@ -1,20 +1,25 @@
 package com.example.usermanagmentapp.data.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
+
+@Parcelize
 data class User(
     @SerializedName("email")
-    val email: String,
+    val email: String?,
     @SerializedName("gender")
-    val gender: String,
+    val gender: String?,
     @SerializedName("id")
     val id: Int = -1,
     @SerializedName("name")
-    val name: String,
+    val name: String?,
     @SerializedName("status")
-    val status: UserStatus
+    val status: UserStatus?
 
-) {
+) : Parcelable {
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -40,9 +45,10 @@ data class User(
     }
 }
 
-enum class UserStatus{
+enum class UserStatus {
     @SerializedName("active")
     Active,
+
     @SerializedName("inactive")
     Inactive
 }

@@ -4,7 +4,7 @@ import com.example.usermanagmentapp.data.model.FormError
 
 class NoUsersFoundError : Error()
 class UsersFetchError : Error()
-class UserNotFound(val userId: Int) : Error()
+class UserNotFoundError(val userId: Int) : Error()
 class AuthorizationError : Error()
 
 

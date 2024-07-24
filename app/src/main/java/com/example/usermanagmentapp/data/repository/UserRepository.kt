@@ -8,9 +8,6 @@ import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
 
 interface UserRepository {
-    //TODO: remove maybe
-    fun userPages(): Flowable<PagingData<User>>
-
     fun users(page: Int, perPage: Int): Single<List<User>>
 
     fun user(id: Int): Single<User>

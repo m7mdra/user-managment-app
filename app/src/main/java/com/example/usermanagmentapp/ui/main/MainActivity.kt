@@ -10,19 +10,24 @@ import android.view.MenuItem
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.MenuProvider
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.usermanagmentapp.R
 import com.example.usermanagmentapp.databinding.ActivityMainBinding
 import com.example.usermanagmentapp.ui.add.AddUserActivity
+import com.example.usermanagmentapp.ui.details.UserDetailsActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(), MenuProvider {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private val viewModel by viewModel<UserViewModel>()
-    private val adapter = UserAdapter()
+
+    private val adapter = UserAdapter { _, user ->
+        val intent = Intent(this, UserDetailsActivity::class.java)
+        intent.putExtra("user_id", user.id)
+        startActivity(intent)
+    }
+
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,14 +41,14 @@ class MainActivity : AppCompatActivity(), MenuProvider {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         viewModel.pagingData.observe(this) {
             adapter.submitData(lifecycle, it)
-
         }
         addMenuProvider(this)
-        activityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if(it.resultCode == RESULT_OK){
-
+        activityResultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if (it.resultCode == RESULT_OK) {
+                    adapter.refresh()
+                }
             }
-        }
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -53,7 +58,7 @@ class MainActivity : AppCompatActivity(), MenuProvider {
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         if (menuItem.itemId == R.id.action_add) {
             val intent = Intent(this, AddUserActivity::class.java)
-           activityResultLauncher.launch(intent)
+            activityResultLauncher.launch(intent)
             return true
         }
         return false

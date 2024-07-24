@@ -6,15 +6,14 @@ import com.example.usermanagmentapp.data.network.UsersNetworkService
 import com.example.usermanagmentapp.data.repository.UserRepository
 import com.example.usermanagmentapp.data.source.UserDataSource
 import com.example.usermanagmentapp.data.source.UserPagingSource
-import com.example.usermanagmentapp.ui.add.AddUserState
 import com.example.usermanagmentapp.ui.add.AddUserViewModel
+import com.example.usermanagmentapp.ui.details.UserDetailsViewModel
 import com.example.usermanagmentapp.ui.main.UserViewModel
 import com.google.gson.GsonBuilder
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -56,12 +55,15 @@ val appModule = module {
         }
     }
     single<UserRepository> {
-        UserDataSource(get(), get(),get())
+        UserDataSource(get(), get())
     }
     viewModel {
         UserViewModel(get(), ioScheduler, mainScheduler)
     }
     viewModel {
         AddUserViewModel(get(), ioScheduler, mainScheduler)
+    }
+    viewModel {
+        UserDetailsViewModel(get(), ioScheduler, mainScheduler)
     }
 }

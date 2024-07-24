@@ -2,13 +2,13 @@ package com.example.usermanagmentapp.ui.add
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Patterns
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import com.example.usermanagmentapp.createProgressDialog
+import com.example.usermanagmentapp.extension.createProgressDialog
 import com.example.usermanagmentapp.data.model.UserStatus
 import com.example.usermanagmentapp.databinding.ActivityAddUserBinding
+import com.example.usermanagmentapp.extension.isValidEmail
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -33,6 +33,7 @@ class AddUserActivity : AppCompatActivity() {
             AddUserState.Success -> {
                 progressDialog.dismiss()
                 Toast.makeText(this, "User added successfully", Toast.LENGTH_SHORT).show()
+                setResult(RESULT_OK)
                 finish()
             }
 
@@ -104,6 +105,4 @@ class AddUserActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun CharSequence?.isValidEmail() =
-        !isNullOrEmpty() && Patterns.EMAIL_ADDRESS.matcher(this).matches()
 }

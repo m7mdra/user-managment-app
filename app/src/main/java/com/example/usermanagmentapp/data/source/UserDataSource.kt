@@ -1,10 +1,7 @@
 package com.example.usermanagmentapp.data.source
 
-import androidx.paging.Pager
-import androidx.paging.PagingData
-import androidx.paging.rxjava3.flowable
 import com.example.usermanagmentapp.data.AuthorizationError
-import com.example.usermanagmentapp.data.UserNotFound
+import com.example.usermanagmentapp.data.UserNotFoundError
 import com.example.usermanagmentapp.data.UsersFetchError
 import com.example.usermanagmentapp.data.ValidationError
 import com.example.usermanagmentapp.data.model.User
@@ -14,18 +11,13 @@ import com.example.usermanagmentapp.data.network.UsersNetworkService
 import com.example.usermanagmentapp.data.repository.UserRepository
 import com.google.gson.Gson
 import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
 
 class UserDataSource(
     private val networkService: UsersNetworkService,
-    private val pager: Pager<Int, User>,
     private val gson: Gson
-) :
-    UserRepository {
-    override fun userPages(): Flowable<PagingData<User>> {
-        return pager.flowable
-    }
+) : UserRepository {
+
 
     override fun users(page: Int, perPage: Int): Single<List<User>> {
         return networkService.getUsers(page, perPage)
@@ -50,7 +42,7 @@ class UserDataSource(
                 if (it.isSuccessful && user != null) {
                     Single.just(user)
                 } else if (it.code() == 404) {
-                    Single.error(UserNotFound(id))
+                    Single.error(UserNotFoundError(id))
                 } else {
                     Single.error(UnknownError())
                 }
@@ -63,12 +55,7 @@ class UserDataSource(
         email: String,
         status: UserStatus
     ): Completable {
-        val newUser = User(
-            name = name,
-            email = email,
-            gender = gender,
-            status = status
-        )
+        val newUser = User(name = name, email = email, gender = gender, status = status)
         return networkService.addNewUser(newUser)
             .flatMapCompletable {
                 val user = it.body()
@@ -83,7 +70,6 @@ class UserDataSource(
                     )
                     Completable.error(ValidationError(errors))
                 } else {
-
                     Completable.error(UnknownError())
                 }
             }

@@ -39,16 +39,17 @@ class UserAdapter(private val onClick: ((Int, User) -> Unit)? = null) :
             holder.imageView.setImageResource(imageFromStatus(status))
 
             holder.itemView.setOnClickListener {
-                onClick?.invoke(position,user)
+                onClick?.invoke(position, user)
             }
         }
     }
 
-    private fun imageFromStatus(status: UserStatus): Int {
+    private fun imageFromStatus(status: UserStatus?): Int {
 
         return when (status) {
             UserStatus.Active -> R.drawable.active_shape
             UserStatus.Inactive -> R.drawable.inactive_shape
+            else -> -1
         }
 
     }

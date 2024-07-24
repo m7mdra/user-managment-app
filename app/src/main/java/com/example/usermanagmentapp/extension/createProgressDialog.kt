@@ -1,4 +1,4 @@
-package com.example.usermanagmentapp
+package com.example.usermanagmentapp.extension
 
 import android.app.Activity
 import io.github.rupinderjeet.kprogresshud.KProgressHUD
