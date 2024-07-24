@@ -3,6 +3,10 @@ package com.example.usermanagmentapp.extension
 import android.app.Activity
 import io.github.rupinderjeet.kprogresshud.KProgressHUD
 
+
+/**
+ * Create a progress dialog for the activity
+ */
 fun Activity.createProgressDialog(message: String? = null): KProgressHUD {
     val create = KProgressHUD.create(this)
     if (message != null) {

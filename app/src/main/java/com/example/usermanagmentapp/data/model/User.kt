@@ -1,10 +1,13 @@
 package com.example.usermanagmentapp.data.model
 
 import android.os.Parcelable
+import androidx.annotation.VisibleForTesting
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
-
+/**
+ * Data class for User
+ */
 @Parcelize
 data class User(
     @SerializedName("email")
@@ -19,6 +22,13 @@ data class User(
     val status: UserStatus?
 
 ) : Parcelable {
+    companion object {
+        @VisibleForTesting
+        @JvmStatic
+        fun testUser(): User {
+            return User("mail@d.com", "name", -1, "gender", UserStatus.Active)
+        }
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -43,12 +53,4 @@ data class User(
         result = 31 * result + status.hashCode()
         return result
     }
-}
-
-enum class UserStatus {
-    @SerializedName("active")
-    Active,
-
-    @SerializedName("inactive")
-    Inactive
 }

@@ -21,7 +21,9 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-
+/**
+ * Module for dependency injection
+ */
 val appModule = module {
     val ioScheduler = Schedulers.io()
     val mainScheduler = AndroidSchedulers.mainThread()

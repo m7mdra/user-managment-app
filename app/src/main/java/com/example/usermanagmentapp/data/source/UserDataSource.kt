@@ -18,7 +18,12 @@ class UserDataSource(
     private val gson: Gson
 ) : UserRepository {
 
-
+    /**
+     * Get a list of users from the a network source.
+     * @param page Page number
+     * @param perPage Number of users per page
+     * @return [List] of [User] or an error, could be [UsersFetchError] or [UnknownError]
+     */
     override fun users(page: Int, perPage: Int): Single<List<User>> {
         return networkService.getUsers(page, perPage)
             .flatMap {
@@ -34,7 +39,11 @@ class UserDataSource(
                 }
             }
     }
-
+    /**
+     * Get a user from the a source.
+     * @param id User id
+     * @return [User] or an error, could be [UserNotFoundError] or [UnknownError]
+     */
     override fun user(id: Int): Single<User> {
         return networkService.getUserDetails(id)
             .flatMap {
@@ -48,7 +57,15 @@ class UserDataSource(
                 }
             }
     }
-
+    /**
+     * Add a new user to the a source.
+     * @param name
+     * @param gender
+     * @param email
+     * @param status
+     * @return [Completable] that return no value or an error,
+     * could be [AuthorizationError] or [ValidationError]
+     */
     override fun addUser(
         name: String,
         gender: String,

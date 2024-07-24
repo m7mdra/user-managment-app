@@ -8,14 +8,35 @@ import com.example.usermanagmentapp.data.repository.UserRepository
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 
+/**
+ * responsible for  getting user details logic and state
+ * @param repository user repository
+ * @param ioScheduler the scheduler to use for background processing
+ * @param mainScheduler the scheduler to use for main processing
+ */
 class UserDetailsViewModel(
     private val repository: UserRepository,
     private val ioScheduler: Scheduler,
     private val mainScheduler: Scheduler
 ) : ViewModel() {
+    /**
+     * state of the view model
+     */
     private val _state = MutableLiveData<UserDetailsState>()
+
+    /**
+     * live data of the state
+     */
     val state: LiveData<UserDetailsState> = _state;
+
+    /**
+     * composite disposable to manage subscriptions
+     */
     private val compositeDisposable = CompositeDisposable()
+
+    /**
+     * load user details from the repository
+     */
     fun loadData(id: Int) {
         val disposable = repository.user(id)
             .doOnSubscribe {
@@ -35,7 +56,9 @@ class UserDetailsViewModel(
         compositeDisposable.add(disposable)
     }
 
-
+    /**
+     * clear the composite disposable
+     */
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.clear()

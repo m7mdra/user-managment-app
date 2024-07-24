@@ -12,6 +12,9 @@ import com.example.usermanagmentapp.extension.isValidEmail
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+/**
+ * Add user activity.
+ */
 class AddUserActivity : AppCompatActivity() {
     private val binding by lazy { ActivityAddUserBinding.inflate(layoutInflater) }
     private val viewModel by viewModel<AddUserViewModel>()

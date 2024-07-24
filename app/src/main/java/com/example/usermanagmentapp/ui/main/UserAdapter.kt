@@ -11,6 +11,9 @@ import com.example.usermanagmentapp.data.model.User
 import com.example.usermanagmentapp.data.model.UserStatus
 import com.example.usermanagmentapp.databinding.RowUserBinding
 
+/**
+ * Adapter for the list of users.
+ */
 class UserAdapter(private val onClick: ((Int, User) -> Unit)? = null) :
     PagingDataAdapter<User, UserViewHolder>(USER_COMPARATOR) {
     companion object {
