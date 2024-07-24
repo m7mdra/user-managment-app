@@ -56,6 +56,7 @@ dependencies {
     implementation("io.reactivex.rxjava3:rxjava:3.1.8")
     implementation("android.arch.lifecycle:viewmodel:1.1.1")
     implementation("android.arch.lifecycle:livedata:1.1.1")
+    implementation("androidx.test.uiautomator:uiautomator:2.3.0")
     val pagingVersion = "3.3.0"
 
     implementation("androidx.paging:paging-runtime-ktx:$pagingVersion")

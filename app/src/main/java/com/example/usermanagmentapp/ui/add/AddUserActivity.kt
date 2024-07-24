@@ -10,6 +10,7 @@ import com.example.usermanagmentapp.data.model.UserStatus
 import com.example.usermanagmentapp.databinding.ActivityAddUserBinding
 import com.example.usermanagmentapp.extension.isValidEmail
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
@@ -25,7 +26,11 @@ class AddUserActivity : AppCompatActivity() {
         when (it) {
             AddUserState.Error -> {
                 progressDialog.dismiss()
-                Toast.makeText(this, "Failed to add a user, try again", Toast.LENGTH_SHORT).show()
+                Snackbar.make(
+                    binding.root,
+                    "Failed to add a user, try again",
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
 
             AddUserState.Loading -> {
@@ -35,14 +40,16 @@ class AddUserActivity : AppCompatActivity() {
 
             AddUserState.Success -> {
                 progressDialog.dismiss()
-                Toast.makeText(this, "User added successfully", Toast.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, "User added successfully", Snackbar.LENGTH_SHORT).show()
+                Thread.sleep(500)
                 setResult(RESULT_OK)
                 finish()
             }
 
             AddUserState.AuthenticationError -> {
                 progressDialog.dismiss()
-                Toast.makeText(this, "Authentication issue", Toast.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, "Authentication issue", Snackbar.LENGTH_SHORT).show()
+
             }
 
             is AddUserState.ValidationError -> {
@@ -92,7 +99,7 @@ class AddUserActivity : AppCompatActivity() {
         binding.emailEditText.error = null
 
         if (genderId == -1) {
-            Toast.makeText(this, "Select gender", Toast.LENGTH_SHORT).show()
+            Snackbar.make(binding.root, "Select a Gender", Snackbar.LENGTH_SHORT).show()
             return
         }
         val gender = if (genderId == binding.maleButton.id) {

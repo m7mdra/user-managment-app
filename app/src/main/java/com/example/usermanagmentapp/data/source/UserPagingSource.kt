@@ -25,11 +25,9 @@ class UserPagingSource(private val repository: UserRepository, private val ioSch
         return repository.users(page, params.loadSize)
             .subscribeOn(ioScheduler)
             .map<LoadResult<Int, User>> { users ->
-                LoadResult.Page(
-                    data = users,
-                    prevKey = if (page == 1) null else page - 1,
-                    nextKey = if (users.isEmpty()) null else page + 1
-                )
+                val prevKey = if (page == 1) null else page - 1
+                val nextKey = if (users.isEmpty()) null else page + 1
+                LoadResult.Page(data = users, prevKey = prevKey, nextKey = nextKey)
             }
             .onErrorReturn { LoadResult.Error(it) }
     }
