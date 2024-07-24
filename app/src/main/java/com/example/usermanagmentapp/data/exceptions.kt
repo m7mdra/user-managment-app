@@ -30,4 +30,4 @@ class AuthorizationError : Error()
 /**
  * A class represent form validation errors.
  */
-class ValidationError(val errors: List<FormError>) : Error()
+class ValidationErrorException(val errors: List<FormError>) : Error()

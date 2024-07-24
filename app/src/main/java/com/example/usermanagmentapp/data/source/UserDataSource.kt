@@ -3,7 +3,7 @@ package com.example.usermanagmentapp.data.source
 import com.example.usermanagmentapp.data.AuthorizationError
 import com.example.usermanagmentapp.data.UserNotFoundError
 import com.example.usermanagmentapp.data.UsersFetchError
-import com.example.usermanagmentapp.data.ValidationError
+import com.example.usermanagmentapp.data.ValidationErrorException
 import com.example.usermanagmentapp.data.model.User
 import com.example.usermanagmentapp.data.model.UserStatus
 import com.example.usermanagmentapp.data.model.FormErrorsResponse
@@ -64,7 +64,7 @@ class UserDataSource(
      * @param email
      * @param status
      * @return [Completable] that return no value or an error,
-     * could be [AuthorizationError] or [ValidationError]
+     * could be [AuthorizationError] or [ValidationErrorException]
      */
     override fun addUser(
         name: String,
@@ -85,7 +85,7 @@ class UserDataSource(
                         it.errorBody()?.string(),
                         FormErrorsResponse::class.java
                     )
-                    Completable.error(ValidationError(errors))
+                    Completable.error(ValidationErrorException(errors))
                 } else {
                     Completable.error(UnknownError())
                 }

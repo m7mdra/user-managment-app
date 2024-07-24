@@ -25,9 +25,8 @@ data class User(
     companion object {
         @VisibleForTesting
         @JvmStatic
-        fun testUser(): User {
-            return User("mail@d.com", "name", -1, "gender", UserStatus.Active)
-        }
+        val testUser = User("mail@d.com", "name", -1, "gender", UserStatus.Active)
+
     }
 
     override fun equals(other: Any?): Boolean {

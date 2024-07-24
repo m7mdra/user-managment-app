@@ -3,7 +3,7 @@ package com.example.usermanagmentapp.data.source
 import com.example.usermanagmentapp.data.AuthorizationError
 import com.example.usermanagmentapp.data.UserNotFoundError
 import com.example.usermanagmentapp.data.UsersFetchError
-import com.example.usermanagmentapp.data.ValidationError
+import com.example.usermanagmentapp.data.ValidationErrorException
 import com.example.usermanagmentapp.data.model.FormError
 import com.example.usermanagmentapp.data.model.FormErrorsResponse
 import com.example.usermanagmentapp.data.model.User
@@ -27,7 +27,7 @@ class UserDataSourceTest {
         whenever(networkService.getUsers(any(), any())).thenReturn(
             Single.just(
                 Response.success(
-                    listOf(User.testUser())
+                    listOf(User.testUser)
                 )
             )
         )
@@ -71,7 +71,7 @@ class UserDataSourceTest {
 
     @Test
     fun testFetchSingleUserHappyCase() {
-        whenever(networkService.getUserDetails(any())).thenReturn(Single.just(Response.success(User.testUser())))
+        whenever(networkService.getUserDetails(any())).thenReturn(Single.just(Response.success(User.testUser)))
         dataSource.user(1).test()
             .assertNoErrors()
             .assertValue { it.id == -1 }
@@ -101,7 +101,7 @@ class UserDataSourceTest {
 
     @Test
     fun testAddSingleUserHappyCase() {
-        val user = User.testUser()
+        val user = User.testUser
         whenever(networkService.addNewUser(any())).thenReturn(Single.just(Response.success(user)))
         dataSource.addUser(user.name!!, user.gender!!, user.email!!, user.status!!).test()
             .assertComplete()
@@ -110,7 +110,7 @@ class UserDataSourceTest {
 
     @Test
     fun testAddSingleUserNotValidHttpCode() {
-        val user = User.testUser()
+        val user = User.testUser
         whenever(networkService.addNewUser(any())).thenReturn(
             Single.just(
                 Response.error(
@@ -126,7 +126,7 @@ class UserDataSourceTest {
 
     @Test
     fun testAddSingleUserAnyError() {
-        val user = User.testUser()
+        val user = User.testUser
         whenever(networkService.addNewUser(any())).thenReturn(Single.error(Exception()))
         dataSource.addUser(user.name!!, user.gender!!, user.email!!, user.status!!)
             .test()
@@ -135,7 +135,7 @@ class UserDataSourceTest {
 
     @Test
     fun testAddSingleUserNotValidFormError() {
-        val user = User.testUser()
+        val user = User.testUser
         val list = FormErrorsResponse()
         list.add(FormError("name", "name is required"))
         val response = Gson().toJson(list)
@@ -149,9 +149,9 @@ class UserDataSourceTest {
         )
         dataSource.addUser(user.name!!, user.gender!!, user.email!!, user.status!!)
             .test()
-            .assertError(ValidationError::class.java)
+            .assertError(ValidationErrorException::class.java)
             .assertError {
-                val exception = it as ValidationError
+                val exception = it as ValidationErrorException
                 exception.errors.first().field == "name"
             }
     }

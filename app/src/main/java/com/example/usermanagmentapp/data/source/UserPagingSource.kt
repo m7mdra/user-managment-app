@@ -2,6 +2,7 @@ package com.example.usermanagmentapp.data.source
 
 import androidx.paging.PagingState
 import androidx.paging.rxjava3.RxPagingSource
+import androidx.paging.PagingSource
 import com.example.usermanagmentapp.data.model.User
 import com.example.usermanagmentapp.data.repository.UserRepository
 import io.reactivex.rxjava3.core.Scheduler

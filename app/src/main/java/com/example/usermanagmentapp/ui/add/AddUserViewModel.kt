@@ -1,10 +1,11 @@
 package com.example.usermanagmentapp.ui.add
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.usermanagmentapp.data.AuthorizationError
-import com.example.usermanagmentapp.data.ValidationError
+import com.example.usermanagmentapp.data.ValidationErrorException
 import com.example.usermanagmentapp.data.model.UserStatus
 import com.example.usermanagmentapp.data.repository.UserRepository
 import io.reactivex.rxjava3.core.Scheduler
@@ -46,7 +47,7 @@ class AddUserViewModel(
             }, {
                 when (it) {
                     is AuthorizationError -> _state.postValue(AddUserState.AuthenticationError)
-                    is ValidationError -> _state.postValue(AddUserState.ValidationError(it.errors))
+                    is ValidationErrorException -> _state.postValue(AddUserState.ValidationError(it.errors))
                     else -> _state.postValue(AddUserState.Error)
                 }
             })
@@ -56,7 +57,8 @@ class AddUserViewModel(
     /**
      * clear the composite disposable
      */
-    override fun onCleared() {
+    @VisibleForTesting
+    public override fun onCleared() {
         super.onCleared()
         compositeDisposable.clear()
     }

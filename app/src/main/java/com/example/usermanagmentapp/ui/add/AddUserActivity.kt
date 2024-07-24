@@ -67,38 +67,45 @@ class AddUserActivity : AppCompatActivity() {
         setSupportActionBar(binding.materialToolbar)
         viewModel.state.observe(this, addUserStateObserver)
         binding.submitButton.setOnClickListener {
-            val name = binding.nameEditText.text?.toString()
-            val email = binding.emailEditText.text?.toString()
-            val genderId = binding.materialButtonToggleGroup.checkedButtonId
-            if (name.isNullOrEmpty()) {
-                binding.nameEditText.error = "Enter A name"
-                return@setOnClickListener
-            }
-            binding.nameEditText.error = null
-            if (email == null || !email.isValidEmail()) {
-                binding.emailEditText.error = "Invalid email address"
-                return@setOnClickListener
-            }
-            binding.emailEditText.error = null
-
-            if (genderId == -1) {
-                Toast.makeText(this, "Select gender", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            val gender = if (genderId == binding.maleButton.id) {
-                "male"
-            } else {
-                "female"
-            }
-            val status = if (binding.statusSwitch.isEnabled) {
-                UserStatus.Active
-            } else {
-                UserStatus.Inactive
-            }
-            viewModel.submit(name, email, gender, status)
+            validateAndSubmit()
 
         }
 
+    }
+    //TODO: move validation to viewModel and make class the handle validation across all app
+    /**
+     * validate add user form and if it all succeed submit data to to [AddUserViewModel]
+     */
+    private fun validateAndSubmit() {
+        val name = binding.nameEditText.text?.toString()
+        val email = binding.emailEditText.text?.toString()
+        val genderId = binding.materialButtonToggleGroup.checkedButtonId
+        if (name.isNullOrEmpty()) {
+            binding.nameEditText.error = "Enter A name"
+            return
+        }
+        binding.nameEditText.error = null
+        if (email == null || !email.isValidEmail()) {
+            binding.emailEditText.error = "Invalid email address"
+            return
+        }
+        binding.emailEditText.error = null
+
+        if (genderId == -1) {
+            Toast.makeText(this, "Select gender", Toast.LENGTH_SHORT).show()
+            return
+        }
+        val gender = if (genderId == binding.maleButton.id) {
+            "male"
+        } else {
+            "female"
+        }
+        val status = if (binding.statusSwitch.isEnabled) {
+            UserStatus.Active
+        } else {
+            UserStatus.Inactive
+        }
+        viewModel.submit(name, email, gender, status)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
