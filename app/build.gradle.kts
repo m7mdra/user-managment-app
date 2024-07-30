@@ -41,7 +41,7 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.13.1")
+    implementation("androidx.core:core:1.13.1")
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
 
@@ -59,9 +59,9 @@ dependencies {
     implementation("androidx.test.uiautomator:uiautomator:2.3.0")
     val pagingVersion = "3.3.0"
 
-    implementation("androidx.paging:paging-runtime-ktx:$pagingVersion")
+    implementation("androidx.paging:paging-runtime:$pagingVersion")
     // alternatively - without Android dependencies for tests
-    testImplementation("androidx.paging:paging-common-ktx:$pagingVersion")
+    testImplementation("androidx.paging:paging-common:$pagingVersion")
     // optional - RxJava3 support
     implementation("androidx.paging:paging-rxjava3:$pagingVersion")
 
