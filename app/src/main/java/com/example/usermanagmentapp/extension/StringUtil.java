@@ -8,7 +8,7 @@ public final class StringUtil {
     private StringUtil() {
     }
 
-    static Boolean isValidEmail(@Nullable String email) {
+    public static Boolean isValidEmail(@Nullable String email) {
         return email != null &&
                 !email.isEmpty() &&
                 Patterns.EMAIL_ADDRESS.matcher(email).matches();

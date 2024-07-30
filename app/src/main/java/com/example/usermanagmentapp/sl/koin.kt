@@ -1,3 +1,5 @@
+@file:JvmName("AppModule")
+
 package com.example.usermanagmentapp.sl
 
 import androidx.paging.Pager

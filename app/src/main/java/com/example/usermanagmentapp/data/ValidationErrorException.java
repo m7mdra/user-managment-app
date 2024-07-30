@@ -8,9 +8,9 @@ import java.util.List;
  * A class represent form validation errors.
  */
 public class ValidationErrorException extends Exception {
-    final List<FormError> errorList;
+    public final List<FormError> errors;
 
     public ValidationErrorException(List<FormError> errorList) {
-        this.errorList = errorList;
+        this.errors = errorList;
     }
 }

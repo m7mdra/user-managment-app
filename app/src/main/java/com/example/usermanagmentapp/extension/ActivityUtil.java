@@ -10,7 +10,7 @@ public final class ActivityUtil {
     private ActivityUtil() {
     }
 
-    static KProgressHUD createProgressDialog(Context context, @Nullable String message) {
+    public static KProgressHUD createProgressDialog(Context context, @Nullable String message) {
         KProgressHUD kProgressHUD = KProgressHUD.create(context);
         if (message != null) {
             kProgressHUD.setLabel(message);
