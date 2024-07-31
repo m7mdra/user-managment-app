@@ -6,7 +6,12 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.usermanagmentapp.data.UserNotFoundError;
 import com.example.usermanagmentapp.data.repository.UserRepository;
+import com.example.usermanagmentapp.di.IOScheduler;
+import com.example.usermanagmentapp.di.MainScheduler;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -14,6 +19,7 @@ import io.reactivex.rxjava3.disposables.Disposable;
 /**
  * responsible for  getting user details logic and state
  */
+@HiltViewModel
 public class UserDetailsViewModel extends ViewModel {
     private final MutableLiveData<UserDetailsState> _state = new MutableLiveData<>();
     public final LiveData<UserDetailsState> state = _state;
@@ -29,7 +35,10 @@ public class UserDetailsViewModel extends ViewModel {
      * @param ioScheduler   the scheduler to use for background processing
      * @param mainScheduler the scheduler to use for main processing
      */
-    public UserDetailsViewModel(UserRepository repository, Scheduler ioScheduler, Scheduler mainScheduler) {
+    @Inject
+    public UserDetailsViewModel(UserRepository repository,
+                                @IOScheduler Scheduler ioScheduler,
+                                @MainScheduler Scheduler mainScheduler) {
         this.repository = repository;
         this.ioScheduler = ioScheduler;
         this.mainScheduler = mainScheduler;

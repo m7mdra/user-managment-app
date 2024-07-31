@@ -9,18 +9,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.usermanagmentapp.data.model.User;
 import com.example.usermanagmentapp.databinding.ActivityUserDetailsBinding;
 
-import org.koin.java.KoinJavaComponent;
+import dagger.hilt.android.AndroidEntryPoint;
 
-import kotlin.Lazy;
-
+@AndroidEntryPoint
 public class UserDetailsActivity extends AppCompatActivity {
     private Integer userId = -1;
     private ActivityUserDetailsBinding binding;
-    private final Lazy<UserDetailsViewModel> viewModelLazy = KoinJavaComponent.inject(UserDetailsViewModel.class);
+    private UserDetailsViewModel userDetailsViewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,9 +29,9 @@ public class UserDetailsActivity extends AppCompatActivity {
         userId = getIntent().getIntExtra("user_id", -1);
         setContentView(binding.getRoot());
         setSupportActionBar(binding.materialToolbar);
-
-        viewModelLazy.getValue().state.observe(this, new UserDetailsStateObserver());
-        viewModelLazy.getValue().load(userId);
+        userDetailsViewModel = new ViewModelProvider(this).get(UserDetailsViewModel.class);
+        userDetailsViewModel.state.observe(this, new UserDetailsStateObserver());
+        userDetailsViewModel.load(userId);
     }
 
     private void showSuccessView() {
@@ -51,7 +51,7 @@ public class UserDetailsActivity extends AppCompatActivity {
         binding.errorLayout.setVisibility(View.VISIBLE);
         binding.progressBar.setVisibility(View.GONE);
         binding.tableLayout.setVisibility(View.GONE);
-        binding.retryButton.setOnClickListener(view -> viewModelLazy.getValue().load(userId));
+        binding.retryButton.setOnClickListener(view -> userDetailsViewModel.load(userId));
         binding.errorTextView.setText(message);
     }
 

@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuProvider;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.PagingData;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,13 +25,13 @@ import com.example.usermanagmentapp.databinding.ActivityMainBinding;
 import com.example.usermanagmentapp.ui.add.AddUserActivity;
 import com.example.usermanagmentapp.ui.details.UserDetailsActivity;
 
-import org.koin.java.KoinJavaComponent;
 
-import kotlin.Lazy;
+import dagger.hilt.android.AndroidEntryPoint;
 
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity implements UserAdapter.UserClickListener,
         MenuProvider {
-    private final Lazy<UserViewModel> viewModelLazy = KoinJavaComponent.inject(UserViewModel.class);
+    private UserViewModel userViewModel;
     private final UserAdapter adapter = new UserAdapter(this);
     private ActivityResultLauncher<Intent> activityResultLauncher;
 
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements UserAdapter.UserC
         setContentView(binding.getRoot());
         setSupportActionBar(binding.topAppBar);
         addMenuProvider(this);
-
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), activityResult -> {
             if (activityResult.getResultCode() == RESULT_OK) {
                 adapter.refresh();
@@ -54,8 +55,8 @@ public class MainActivity extends AppCompatActivity implements UserAdapter.UserC
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        viewModelLazy.getValue().state.observe(this, new UsersStateObserver());
-        viewModelLazy.getValue().pagesSubscribe();
+        userViewModel.state.observe(this, new UsersStateObserver());
+        userViewModel.pagesSubscribe();
     }
 
     @Override

@@ -8,11 +8,17 @@ import com.example.usermanagmentapp.data.AuthorizationError;
 import com.example.usermanagmentapp.data.ValidationErrorException;
 import com.example.usermanagmentapp.data.model.UserStatus;
 import com.example.usermanagmentapp.data.repository.UserRepository;
+import com.example.usermanagmentapp.di.IOScheduler;
+import com.example.usermanagmentapp.di.MainScheduler;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 
+@HiltViewModel
 public class AddUserViewModel extends ViewModel {
     private final MutableLiveData<AddUserState> _state = new MutableLiveData<>();
     public final LiveData<AddUserState> state = _state;
@@ -21,7 +27,10 @@ public class AddUserViewModel extends ViewModel {
     private final Scheduler ioScheduler;
     private final Scheduler mainScheduler;
 
-    public AddUserViewModel(UserRepository repository, Scheduler ioScheduler, Scheduler mainScheduler) {
+    @Inject
+    public AddUserViewModel(UserRepository repository,
+                            @IOScheduler Scheduler ioScheduler,
+                            @MainScheduler Scheduler mainScheduler) {
         this.repository = repository;
         this.ioScheduler = ioScheduler;
         this.mainScheduler = mainScheduler;

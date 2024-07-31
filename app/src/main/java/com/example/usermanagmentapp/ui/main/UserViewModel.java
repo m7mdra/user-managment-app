@@ -8,7 +8,12 @@ import androidx.paging.PagingData;
 import androidx.paging.rxjava3.PagingRx;
 
 import com.example.usermanagmentapp.data.model.User;
+import com.example.usermanagmentapp.di.IOScheduler;
+import com.example.usermanagmentapp.di.MainScheduler;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -16,6 +21,7 @@ import io.reactivex.rxjava3.disposables.Disposable;
 /**
  * Responsible for getting user from paging data source
  */
+@HiltViewModel
 public class UserViewModel extends ViewModel {
 
     private final MutableLiveData<PagingData<User>> _state = new MutableLiveData<>();
@@ -29,11 +35,15 @@ public class UserViewModel extends ViewModel {
     private final Scheduler ioScheduler;
     private final Scheduler mainScheduler;
 
-    public UserViewModel(Pager<Integer, User> repository, Scheduler ioScheduler, Scheduler mainScheduler) {
+    @Inject
+    public UserViewModel(Pager<Integer, User> repository,
+                         @IOScheduler Scheduler ioScheduler,
+                         @MainScheduler Scheduler mainScheduler) {
         this.pager = repository;
         this.ioScheduler = ioScheduler;
         this.mainScheduler = mainScheduler;
     }
+
     /**
      * Subscribe to paging data source
      */

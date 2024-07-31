@@ -1,11 +1,14 @@
 package com.example.usermanagmentapp.ui.add;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.usermanagmentapp.data.model.FormError;
 import com.example.usermanagmentapp.data.model.UserStatus;
@@ -15,17 +18,15 @@ import com.example.usermanagmentapp.extension.StringUtil;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
-import org.koin.java.KoinJavaComponent;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
+import dagger.hilt.android.AndroidEntryPoint;
 import io.github.rupinderjeet.kprogresshud.KProgressHUD;
-import kotlin.Lazy;
 
+@AndroidEntryPoint
 public class AddUserActivity extends AppCompatActivity implements View.OnClickListener {
-    private final Lazy<AddUserViewModel> viewModelLazy
-            = KoinJavaComponent.inject(AddUserViewModel.class);
+    private AddUserViewModel addUserViewModel;
     private KProgressHUD progressDialog;
 
     private class AddUserStateObserver implements Observer<AddUserState> {
@@ -71,7 +72,7 @@ public class AddUserActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    ;
+
     private ActivityAddUserBinding binding;
 
     @Override
@@ -80,9 +81,9 @@ public class AddUserActivity extends AppCompatActivity implements View.OnClickLi
         binding = ActivityAddUserBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.materialToolbar);
-
+        addUserViewModel = new ViewModelProvider(this).get(AddUserViewModel.class);
         progressDialog = ActivityUtil.createProgressDialog(this, null);
-        viewModelLazy.getValue().state.observe(this, new AddUserStateObserver());
+        addUserViewModel.state.observe(this, new AddUserStateObserver());
         binding.submitButton.setOnClickListener(this);
     }
 
@@ -117,11 +118,19 @@ public class AddUserActivity extends AppCompatActivity implements View.OnClickLi
         } else {
             status = UserStatus.Inactive;
         }
-        viewModelLazy.getValue().submit(name, email, gender, status);
+        addUserViewModel.submit(name, email, gender, status);
     }
 
     @Override
     public void onClick(View view) {
         validateAndSubmit();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId()==android.R.id.home){
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
