@@ -38,9 +38,7 @@ public class AddUserViewModel extends ViewModel {
 
     public void submit(String name, String email, String gender, UserStatus status) {
         Disposable disposable = repository.addUser(name, gender, email, status)
-                .doOnSubscribe(d -> {
-                    _state.postValue(new AddUserState.Loading());
-                })
+                .doOnSubscribe(d -> _state.postValue(new AddUserState.Loading()))
                 .observeOn(mainScheduler)
                 .subscribeOn(ioScheduler)
                 .subscribe(() -> {
