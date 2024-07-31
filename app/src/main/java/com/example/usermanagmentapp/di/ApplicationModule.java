@@ -92,13 +92,10 @@ public class ApplicationModule {
         return AndroidSchedulers.mainThread();
     }
 
-    @Provides
-    public UserPagingSource createUserPagingSource(UserRepository userRepository, @IOScheduler Scheduler ioScheduler) {
-        return new UserPagingSource(userRepository, ioScheduler);
-    }
+
 
     @Provides
-    public Pager<Integer, User> createPager(UserPagingSource pagingSource) {
-        return new Pager<>(new PagingConfig(50), 1, () -> pagingSource);
+    public Pager<Integer, User> createPager(UserRepository userRepository, @IOScheduler Scheduler ioScheduler) {
+        return new Pager<>(new PagingConfig(50), 1, () -> new UserPagingSource(userRepository, ioScheduler));
     }
 }

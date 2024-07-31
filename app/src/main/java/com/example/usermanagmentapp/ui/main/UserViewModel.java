@@ -17,6 +17,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Consumer;
 
 /**
  * Responsible for getting user from paging data source
@@ -52,7 +53,9 @@ public class UserViewModel extends ViewModel {
         Disposable disposable = PagingRx.getFlowable(pager)
                 .subscribeOn(ioScheduler)
                 .observeOn(mainScheduler)
-                .subscribe(_state::setValue);
+                .subscribe(_state::setValue, throwable -> {
+
+                });
         compositeDisposable.add(disposable);
     }
 
